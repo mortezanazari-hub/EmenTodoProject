@@ -8,16 +8,103 @@ import 'package:roundcheckbox/roundcheckbox.dart';
 import 'package:todoproject/Constant.dart';
 import 'package:todoproject/Models/SimpleToDoModel.dart';
 
+//!Select Time widget
+class MySelectTime extends StatefulWidget {
+  final String title;
 
+  MySelectTime({super.key, required this.title});
+
+  @override
+  State<MySelectTime> createState() => _MySelectTimeState();
+}
+
+class _MySelectTimeState extends State<MySelectTime> {
+  late TimeOfDay _timeOfDay;
+
+  @override
+  void initState() {
+    super.initState();
+    _timeOfDay = TimeOfDay(hour: 0, minute: 0);
+  }
+
+  String formatTimeOfDay(TimeOfDay time) {
+    final hours = time.hourOfPeriod == 0 ? 12 : time.hourOfPeriod;
+    final minutes = time.minute.toString().padLeft(2, '0');
+    final period = time.period == DayPeriod.am ? 'AM' : 'PM';
+    return "$hours : $minutes $period";
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Text(
+          widget.title,
+          style: TextStyle(
+              color: Colors.white.withOpacity(0.8),
+              fontSize: 20,
+              fontWeight: FontWeight.w100),
+        ),
+        InkWell(
+          borderRadius: BorderRadius.circular(14),
+          onTap: () async {
+            TimeOfDay? pickedTime = await showTimePicker(
+              context: context,
+              initialTime: _timeOfDay,
+              confirmText: "Ok",
+              cancelText: "Cancel",
+            );
+            if (pickedTime != null && pickedTime != _timeOfDay) {
+              setState(() {
+                _timeOfDay = pickedTime;
+              });
+            }
+          },
+          child: Container(
+            height: 58,
+            width: 180,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(14),
+                color: MyConst.field_Black_Color),
+            padding: EdgeInsets.only(left: 5, top: 7, bottom: 7, right: 30),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.access_time_rounded,
+                  size: 30,
+                  color: MyConst.purpleColor,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  formatTimeOfDay(_timeOfDay),
+                  style: TextStyle(
+                      color: Colors.white.withOpacity(0.8), fontSize: 20),
+                )
+              ],
+            ),
+          ),
+        )
+      ],
+    );
+  }
+}
 
 //!To do List Model
 class TodoListModel extends StatelessWidget {
   late DateTime dateTime;
   late int index;
+
   TodoListModel({super.key, required this.index, required this.dateTime});
+
   Random random = new Random();
 
   late var _todoList = MyConst.TodoListQuery(dateTime);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -38,8 +125,8 @@ class TodoListModel extends StatelessWidget {
               color: _todoList[index].priority == Priority.high
                   ? MyConst.priorityHighColor
                   : _todoList[index].priority == Priority.medium
-                  ? MyConst.priorityMiddleColor
-                  : MyConst.priorityLowColor,
+                      ? MyConst.priorityMiddleColor
+                      : MyConst.priorityLowColor,
             ),
             const SizedBox(
               width: 15,
@@ -316,6 +403,302 @@ class TitleWithAvatar extends StatelessWidget {
           ],
         )
       ],
+    );
+  }
+}
+
+//! one line text field
+class MyCustomTextField extends StatelessWidget {
+  String hint;
+
+  MyCustomTextField({
+    super.key,
+    required this.hint,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(top: 5),
+      padding: const EdgeInsets.only(top: 6),
+      height: 60,
+      decoration: BoxDecoration(
+          color: MyConst.field_Black_Color,
+          borderRadius: BorderRadius.circular(7)),
+      child: TextField(
+        style: TextStyle(color: MyConst.white_Color),
+        decoration: InputDecoration(
+            border: const OutlineInputBorder(borderSide: BorderSide.none),
+            hintText: hint,
+            fillColor: MyConst.white_80_Color,
+            hintStyle: TextStyle(color: MyConst.white_80_Color)),
+      ),
+    );
+  }
+}
+
+//! multi line text field
+class MyCustomMultiTextField extends StatelessWidget {
+  String hint;
+
+  MyCustomMultiTextField({
+    super.key,
+    required this.hint,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(top: 5),
+      padding: const EdgeInsets.only(top: 6),
+      decoration: BoxDecoration(
+          color: MyConst.field_Black_Color,
+          borderRadius: BorderRadius.circular(7)),
+      child: TextField(
+        maxLines: null,
+        minLines: 3,
+        maxLength: 500,
+        style: TextStyle(color: MyConst.white_Color),
+        decoration: InputDecoration(
+            border: const OutlineInputBorder(borderSide: BorderSide.none),
+            hintText: hint,
+            hintStyle: TextStyle(color: MyConst.white_80_Color)),
+      ),
+    );
+  }
+}
+
+//! DateWeekSelector
+class DateWeekSelector extends StatefulWidget {
+  const DateWeekSelector({super.key});
+
+  @override
+  State<DateWeekSelector> createState() => _DateWeekSelectorState();
+}
+
+class _DateWeekSelectorState extends State<DateWeekSelector> {
+  late DateTime _selectedDate;
+  late List<DateTime> _sevenDays;
+  DateTime? selectedDay;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedDate = DateTime.now();
+    _sevenDays =
+        List.generate(7, (index) => _selectedDate.add(Duration(days: index)));
+    selectedDay = _sevenDays[3];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          ShowWeek(),
+          const SizedBox(height: 20),
+          SelectOfWeek(),
+        ],
+      ),
+    );
+  }
+
+//* Show Week duration
+  Row ShowWeek() {
+    DateTime? selected;
+    return Row(
+      children: [
+        InkWell(
+          onTap: () {
+            setState(() {
+              var _changedTime = _selectedDate.add(Duration(days: -7));
+              _selectedDate = _changedTime;
+              _sevenDays = List.generate(
+                  7, (index) => _selectedDate.add(Duration(days: index)));
+            });
+          },
+          borderRadius: BorderRadius.circular(20),
+          child: Container(
+            padding: EdgeInsets.zero,
+            child: Icon(
+              Icons.keyboard_arrow_left,
+              size: 30,
+              color: MyConst.purpleColor,
+            ),
+          ),
+        ), // <
+        const Spacer(),
+        InkWell(
+          onTap: () async {
+            DateTime? pickedDate = await showDatePicker(
+              context: context,
+              initialDate: _selectedDate!,
+              firstDate: DateTime(2020),
+              lastDate: DateTime.now().add(Duration(days: 3650)),
+            );
+            if (pickedDate != null && pickedDate != _selectedDate) {
+              setState(() {
+                _selectedDate = pickedDate;
+                _sevenDays = List.generate(
+                    7, (index) => _selectedDate.add(Duration(days: index)));
+              });
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Text(
+              "${MyConst.formatDate(_selectedDate)} - ${MyConst.formatDate(_selectedDate.add(Duration(days: 6)))}",
+              style: TextStyle(color: MyConst.purpleColor, fontSize: 20),
+            ),
+          ),
+        ), // date picker
+        const Spacer(),
+        InkWell(
+          onTap: () {
+            setState(() {
+              var _changedTime = _selectedDate.add(Duration(days: 7));
+              _selectedDate = _changedTime;
+              _sevenDays = List.generate(
+                  7, (index) => _selectedDate.add(Duration(days: index)));
+            });
+          },
+          borderRadius: BorderRadius.circular(20),
+          child: Container(
+            padding: EdgeInsets.zero,
+            child: Icon(
+              Icons.keyboard_arrow_right,
+              size: 30,
+              color: MyConst.purpleColor,
+            ),
+          ),
+        ), // >
+      ],
+    );
+  }
+
+  //! select a day from week
+  Container SelectOfWeek() {
+    return Container(
+      clipBehavior: Clip.none,
+      width: double.infinity,
+      height: 75,
+      child: ListView.builder(
+        itemCount: 7,
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context, index) {
+          var currentDay = _sevenDays[index];
+          var isSelected = currentDay == selectedDay;
+
+          return InkWell(
+            borderRadius: BorderRadius.circular(15),
+            onTap: () {
+              setState(() {
+                selectedDay = currentDay;
+              });
+            },
+            child: AnimatedContainer(
+              clipBehavior: Clip.none,
+              duration: const Duration(milliseconds: 200),
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(15),
+                border: isSelected
+                    ? Border.all(color: MyConst.purpleColor, width: 2)
+                    : null,
+              ),
+              padding: const EdgeInsets.all(8.0),
+              child: Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.center,
+                children: [
+                  SizedBox(
+                    width: 35,
+                    height: 60,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          DateFormat('EEE').format(currentDay),
+                          style: TextStyle(
+                            color: isSelected
+                                ? MyConst.purpleColor
+                                : Colors.white60,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          DateFormat('dd').format(currentDay),
+                          style: TextStyle(
+                            color: isSelected
+                                ? MyConst.purpleColor
+                                : Colors.white60,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (isSelected)
+                    Positioned(
+                      top: 57,
+                      child: Icon(
+                        Icons.circle,
+                        color: MyConst.purpleColor,
+                        size: 12,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+//!Title With Back Icon
+class TitleWithBackIcon extends StatelessWidget {
+  String title;
+
+  TitleWithBackIcon({super.key, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      //
+      height: 100,
+      child: Row(
+        children: [
+          Container(
+              width: 30,
+              height: 30,
+              child: IconButton(
+                style: IconButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        side:
+                            const BorderSide(color: Colors.white, width: 1.5)),
+                    padding: EdgeInsets.all(3)),
+                icon: Icon(
+                  size: 16,
+                  Icons.arrow_back,
+                  color: MyConst.white_Color,
+                ),
+                onPressed: () {},
+              )),
+          Spacer(),
+          Text(
+            title,
+            style: TextStyle(fontSize: 25),
+          ),
+          Spacer(),
+          SizedBox(height: 30, width: 30)
+        ],
+      ),
     );
   }
 }
