@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:todoproject/screens/AddSimpleTodo.dart';
 import 'package:todoproject/screens/HomeScreen.dart';
 
@@ -11,14 +12,17 @@ class MyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        textTheme: const TextTheme(
-          bodyMedium: TextStyle(color: Colors.white),
+    return ScreenUtilInit(
+      designSize: const Size(412, 914),
+      child: MaterialApp(
+        theme: ThemeData(
+          textTheme: const TextTheme(
+            bodyMedium: TextStyle(color: Colors.white),
+          ),
         ),
+        debugShowCheckedModeBanner: false,
+        home: AddSimpleTodo(),
       ),
-      debugShowCheckedModeBanner: false,
-      home: AddSimpleTodo(),
     );
   }
 }

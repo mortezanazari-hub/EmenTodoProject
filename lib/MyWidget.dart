@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +12,9 @@ import 'package:todoproject/Models/SimpleToDoModel.dart';
 //!Select Time widget
 class MySelectTime extends StatefulWidget {
   final String title;
+  double screenWidth;
 
-  MySelectTime({super.key, required this.title});
+  MySelectTime({super.key, required this.title, required this.screenWidth});
 
   @override
   State<MySelectTime> createState() => _MySelectTimeState();
@@ -20,11 +22,12 @@ class MySelectTime extends StatefulWidget {
 
 class _MySelectTimeState extends State<MySelectTime> {
   late TimeOfDay _timeOfDay;
-
+  late double _screenWidth;
   @override
   void initState() {
     super.initState();
     _timeOfDay = TimeOfDay(hour: 0, minute: 0);
+    _screenWidth = widget.screenWidth;
   }
 
   String formatTimeOfDay(TimeOfDay time) {
@@ -44,11 +47,11 @@ class _MySelectTimeState extends State<MySelectTime> {
           widget.title,
           style: TextStyle(
               color: Colors.white.withOpacity(0.8),
-              fontSize: 20,
-              fontWeight: FontWeight.w100),
+              fontSize: 20.w,
+              fontWeight: FontWeight.w300),
         ),
         InkWell(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(14.r),
           onTap: () async {
             TimeOfDay? pickedTime = await showTimePicker(
               context: context,
@@ -63,27 +66,31 @@ class _MySelectTimeState extends State<MySelectTime> {
             }
           },
           child: Container(
-            height: 58,
-            width: 180,
+            height: 58.w,
+            width: _screenWidth / 2.3,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(14),
                 color: MyConst.field_Black_Color),
-            padding: EdgeInsets.only(left: 5, top: 7, bottom: 7, right: 30),
+            padding: EdgeInsets.only(
+                left: _screenWidth / 60,
+                top: _screenWidth / 58,
+                bottom: _screenWidth / 58,
+                right: _screenWidth / 58),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
                   Icons.access_time_rounded,
-                  size: 30,
+                  size: 25.w,
                   color: MyConst.purpleColor,
                 ),
                 SizedBox(
-                  width: 10,
+                  width: 10.w,
                 ),
                 Text(
                   formatTimeOfDay(_timeOfDay),
                   style: TextStyle(
-                      color: Colors.white.withOpacity(0.8), fontSize: 20),
+                      color: Colors.white.withOpacity(0.8), fontSize: 18.w),
                 )
               ],
             ),
@@ -419,19 +426,20 @@ class MyCustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 5),
-      padding: const EdgeInsets.only(top: 6),
-      height: 60,
+      margin: EdgeInsets.only(top: 5.w),
+      padding: EdgeInsets.only(top: 6.w),
+      height: 60.w,
       decoration: BoxDecoration(
           color: MyConst.field_Black_Color,
-          borderRadius: BorderRadius.circular(7)),
+          borderRadius: BorderRadius.circular(7.w)),
       child: TextField(
-        style: TextStyle(color: MyConst.white_Color),
+        style: TextStyle(color: MyConst.white_Color, fontSize: 16.w),
         decoration: InputDecoration(
             border: const OutlineInputBorder(borderSide: BorderSide.none),
             hintText: hint,
             fillColor: MyConst.white_80_Color,
-            hintStyle: TextStyle(color: MyConst.white_80_Color)),
+            hintStyle:
+                TextStyle(color: MyConst.white_80_Color, fontSize: 16.w)),
       ),
     );
   }
@@ -449,20 +457,21 @@ class MyCustomMultiTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 5),
-      padding: const EdgeInsets.only(top: 6),
+      margin: EdgeInsets.only(top: 5.w),
+      padding: EdgeInsets.only(top: 6.w),
       decoration: BoxDecoration(
           color: MyConst.field_Black_Color,
-          borderRadius: BorderRadius.circular(7)),
+          borderRadius: BorderRadius.circular(7.w)),
       child: TextField(
         maxLines: null,
         minLines: 3,
         maxLength: 500,
-        style: TextStyle(color: MyConst.white_Color),
+        style: TextStyle(color: MyConst.white_Color, fontSize: 16.w),
         decoration: InputDecoration(
             border: const OutlineInputBorder(borderSide: BorderSide.none),
             hintText: hint,
-            hintStyle: TextStyle(color: MyConst.white_80_Color)),
+            hintStyle:
+                TextStyle(color: MyConst.white_80_Color, fontSize: 16.w)),
       ),
     );
   }
@@ -470,13 +479,16 @@ class MyCustomMultiTextField extends StatelessWidget {
 
 //! DateWeekSelector
 class DateWeekSelector extends StatefulWidget {
-  const DateWeekSelector({super.key});
+  double screenWidth;
+
+  DateWeekSelector({super.key, required this.screenWidth});
 
   @override
   State<DateWeekSelector> createState() => _DateWeekSelectorState();
 }
 
 class _DateWeekSelectorState extends State<DateWeekSelector> {
+  late double _screenWidth;
   late DateTime _selectedDate;
   late List<DateTime> _sevenDays;
   DateTime? selectedDay;
@@ -484,6 +496,7 @@ class _DateWeekSelectorState extends State<DateWeekSelector> {
   @override
   void initState() {
     super.initState();
+    _screenWidth = widget.screenWidth;
     _selectedDate = DateTime.now();
     _sevenDays =
         List.generate(7, (index) => _selectedDate.add(Duration(days: index)));
@@ -496,7 +509,7 @@ class _DateWeekSelectorState extends State<DateWeekSelector> {
       child: Column(
         children: [
           ShowWeek(),
-          const SizedBox(height: 20),
+          SizedBox(height: 20.w),
           SelectOfWeek(),
         ],
       ),
@@ -522,7 +535,7 @@ class _DateWeekSelectorState extends State<DateWeekSelector> {
             padding: EdgeInsets.zero,
             child: Icon(
               Icons.keyboard_arrow_left,
-              size: 30,
+              size: 25.w,
               color: MyConst.purpleColor,
             ),
           ),
@@ -548,7 +561,7 @@ class _DateWeekSelectorState extends State<DateWeekSelector> {
             padding: const EdgeInsets.all(5.0),
             child: Text(
               "${MyConst.formatDate(_selectedDate)} - ${MyConst.formatDate(_selectedDate.add(Duration(days: 6)))}",
-              style: TextStyle(color: MyConst.purpleColor, fontSize: 20),
+              style: TextStyle(color: MyConst.purpleColor, fontSize: 16.w),
             ),
           ),
         ), // date picker
@@ -562,12 +575,12 @@ class _DateWeekSelectorState extends State<DateWeekSelector> {
                   7, (index) => _selectedDate.add(Duration(days: index)));
             });
           },
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20.w),
           child: Container(
             padding: EdgeInsets.zero,
             child: Icon(
               Icons.keyboard_arrow_right,
-              size: 30,
+              size: 25.w,
               color: MyConst.purpleColor,
             ),
           ),
@@ -581,80 +594,86 @@ class _DateWeekSelectorState extends State<DateWeekSelector> {
     return Container(
       clipBehavior: Clip.none,
       width: double.infinity,
-      height: 75,
-      child: ListView.builder(
-        itemCount: 7,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) {
-          var currentDay = _sevenDays[index];
-          var isSelected = currentDay == selectedDay;
+      height: 75.sp,
+      child: Center(
+        child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: 7,
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (context, index) {
+            var currentDay = _sevenDays[index];
+            var isSelected = currentDay == selectedDay;
 
-          return InkWell(
-            borderRadius: BorderRadius.circular(15),
-            onTap: () {
-              setState(() {
-                selectedDay = currentDay;
-              });
-            },
-            child: AnimatedContainer(
-              clipBehavior: Clip.none,
-              duration: const Duration(milliseconds: 200),
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.circular(15),
-                border: isSelected
-                    ? Border.all(color: MyConst.purpleColor, width: 2)
-                    : null,
-              ),
-              padding: const EdgeInsets.all(8.0),
-              child: Stack(
+            return InkWell(
+              borderRadius: BorderRadius.circular(15),
+              onTap: () {
+                print("$_screenWidth => ${_screenWidth / 11}");
+                setState(() {
+                  selectedDay = currentDay;
+                });
+              },
+              child: AnimatedContainer(
                 clipBehavior: Clip.none,
-                alignment: Alignment.center,
-                children: [
-                  SizedBox(
-                    width: 35,
-                    height: 60,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          DateFormat('EEE').format(currentDay),
-                          style: TextStyle(
-                            color: isSelected
-                                ? MyConst.purpleColor
-                                : Colors.white60,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
+                duration: const Duration(milliseconds: 50),
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(15),
+                  border: isSelected
+                      ? Border.all(color: MyConst.purpleColor, width: 2)
+                      : null,
+                ),
+                padding: EdgeInsets.only(
+                    top: 8, bottom: 8, right: 10.5.w, left: 10.5.w),
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  alignment: Alignment.center,
+                  children: [
+                    SizedBox(
+                      width: _screenWidth / 13,
+                      height: 100.sp,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            DateFormat('EEE').format(currentDay),
+                            style: TextStyle(
+                              color: isSelected
+                                  ? MyConst.purpleColor
+                                  : Colors.white60,
+                              fontSize: 14.w,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          DateFormat('dd').format(currentDay),
-                          style: TextStyle(
-                            color: isSelected
-                                ? MyConst.purpleColor
-                                : Colors.white60,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
+                          const SizedBox(height: 10),
+                          Text(
+                            DateFormat('dd').format(currentDay),
+                            style: TextStyle(
+                              color: isSelected
+                                  ? MyConst.purpleColor
+                                  : Colors.white60,
+                              fontSize: 14.w,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  if (isSelected)
-                    Positioned(
-                      top: 57,
-                      child: Icon(
-                        Icons.circle,
-                        color: MyConst.purpleColor,
-                        size: 12,
+                        ],
                       ),
                     ),
-                ],
+                    if (isSelected)
+                      Positioned(
+                        //top: 58.dm,
+                        bottom: -14.r,
+                        child: Icon(
+                          Icons.circle,
+                          color: MyConst.purpleColor,
+                          size: 11.sp,
+                        ),
+                      ),
+                  ],
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
@@ -663,28 +682,30 @@ class _DateWeekSelectorState extends State<DateWeekSelector> {
 //!Title With Back Icon
 class TitleWithBackIcon extends StatelessWidget {
   String title;
+  double screenWidth;
 
-  TitleWithBackIcon({super.key, required this.title});
+  TitleWithBackIcon(
+      {super.key, required this.title, required this.screenWidth});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       //
-      height: 100,
+      height: 70.w,
       child: Row(
         children: [
           Container(
-              width: 30,
-              height: 30,
+              width: 30.w,
+              height: 30.w,
               child: IconButton(
                 style: IconButton.styleFrom(
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
+                        borderRadius: BorderRadius.circular(30.w),
                         side:
                             const BorderSide(color: Colors.white, width: 1.5)),
-                    padding: EdgeInsets.all(3)),
+                    padding: EdgeInsets.all(3.w)),
                 icon: Icon(
-                  size: 16,
+                  size: 16.w,
                   Icons.arrow_back,
                   color: MyConst.white_Color,
                 ),
@@ -693,10 +714,10 @@ class TitleWithBackIcon extends StatelessWidget {
           Spacer(),
           Text(
             title,
-            style: TextStyle(fontSize: 25),
+            style: TextStyle(fontSize: 24.w),
           ),
           Spacer(),
-          SizedBox(height: 30, width: 30)
+          SizedBox(height: 30.w, width: 30.w)
         ],
       ),
     );

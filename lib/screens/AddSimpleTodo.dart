@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:todoproject/Constant.dart';
 import 'package:todoproject/main.dart';
@@ -16,42 +17,47 @@ class AddSimpleTodo extends StatefulWidget {
 class _AddSimpleTodoState extends State<AddSimpleTodo> {
   @override
   Widget build(BuildContext context) {
+    var _screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: MyConst.back_Black_Color,
-      body: Container(
-        padding: EdgeInsets.all(20),
-        child: SafeArea(
-          child: SingleChildScrollView(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.all(20.w),
             child: Column(
               children: [
-                TitleWithBackIcon(title: "Create new task"),
-                DateWeekSelector(),
+                TitleWithBackIcon(
+                    screenWidth: _screenWidth, title: "Create new task"),
+                DateWeekSelector(
+                  screenWidth: _screenWidth,
+                ),
                 SimpleTitle("Schedule"),
                 MyCustomTextField(hint: "Name"),
                 MyCustomMultiTextField(hint: "Description"),
-                SizedBox(height: 25),
+                SizedBox(height: 25.w),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Spacer(),
-                    MySelectTime(title: "Start Time"),
-                    const SizedBox(width: 10),
-                    MySelectTime(title: "End Time"),
+                    MySelectTime(
+                        screenWidth: _screenWidth, title: "Start Time"),
+                    SizedBox(width: 10.w),
+                    MySelectTime(screenWidth: _screenWidth, title: "End Time"),
                     const Spacer(),
                   ],
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10.w),
                 SimpleTitle("Priority"),
-                priortyRowCheckBox(),
-                const SizedBox(height: 30),
+                priortyRowCheckBox(_screenWidth),
+                SizedBox(height: 30.w),
                 notifactionSwitch(),
-                const SizedBox(height: 30),
+                SizedBox(height: 30.w),
                 InkWell(
                   onTap: () {},
                   borderRadius: BorderRadius.circular(10),
                   child: Container(
                       width: double.infinity,
-                      height: 50,
+                      height: 50.w,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
@@ -61,7 +67,10 @@ class _AddSimpleTodoState extends State<AddSimpleTodo> {
                           end: Alignment.centerRight,
                         ),
                       ),
-                      child: const Text("Custom Button")),
+                      child: Text(
+                        "Custom Button",
+                        style: TextStyle(fontSize: 16.w),
+                      )),
                 )
               ],
             ),
@@ -74,9 +83,9 @@ class _AddSimpleTodoState extends State<AddSimpleTodo> {
   Row notifactionSwitch() {
     return Row(
       children: [
-        const Text(
+        Text(
           "Get alert for this task",
-          style: TextStyle(fontSize: 14.4),
+          style: TextStyle(fontSize: 16.w),
         ),
         Spacer(),
         SizedBox(
@@ -86,7 +95,7 @@ class _AddSimpleTodoState extends State<AddSimpleTodo> {
             activeTrackColor: const Color(0xffA378FF),
             thumbColor: const WidgetStatePropertyAll(Colors.white),
             inactiveTrackColor: MyConst.field_Black_Color,
-            splashRadius: 20.0, // Fix: set a valid double value
+            splashRadius: 20.0.w, // Fix: set a valid double value
             //trackOutlineWidth: 2.0,
           ),
         )
@@ -94,23 +103,26 @@ class _AddSimpleTodoState extends State<AddSimpleTodo> {
     );
   }
 
-  Row priortyRowCheckBox() {
+  Row priortyRowCheckBox(double _screenWidth) {
     return Row(
       children: [
         Spacer(),
         ButtenCheckBox(
+          screenWidth: _screenWidth,
           borderColor: MyConst.priorityHighColor,
           title: "High",
           onTap: (p0) => {},
         ),
         Spacer(),
         ButtenCheckBox(
+          screenWidth: _screenWidth,
           borderColor: MyConst.priorityMiddleColor,
           title: "Middle",
           onTap: (p0) => {},
         ),
         Spacer(),
         ButtenCheckBox(
+          screenWidth: _screenWidth,
           borderColor: MyConst.priorityLowColor,
           title: "low",
           onTap: (p0) => {},
@@ -123,12 +135,12 @@ class _AddSimpleTodoState extends State<AddSimpleTodo> {
   Row SimpleTitle(String title) {
     return Row(
       children: [
-        const SizedBox(
-          height: 50,
+        SizedBox(
+          height: 50.w,
         ),
         Text(
           title,
-          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w100),
+          style: TextStyle(fontSize: 20.w, fontWeight: FontWeight.w300),
         ),
         Spacer(),
       ],
@@ -142,10 +154,12 @@ class ButtenCheckBox extends StatefulWidget {
   String title;
   Function(bool) onTap;
   Color borderColor;
+  double screenWidth;
 
   ButtenCheckBox(
       {super.key,
       required this.title,
+      required this.screenWidth,
       required this.onTap,
       required this.borderColor});
 
@@ -156,12 +170,14 @@ class ButtenCheckBox extends StatefulWidget {
 class _ButtenCheckBoxState extends State<ButtenCheckBox> {
   bool _checked = false; // default value is false
   late Color _borderColor;
+  late double _screenWidth;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _borderColor = widget.borderColor;
+    _screenWidth = widget.screenWidth;
   }
 
   @override
@@ -174,18 +190,21 @@ class _ButtenCheckBoxState extends State<ButtenCheckBox> {
         widget.onTap(_checked);
       },
       child: Container(
-          width: 120,
-          height: 40,
+          width: _screenWidth / 4,
+          height: _screenWidth / 12,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(7),
+            borderRadius: BorderRadius.circular(7.r),
             border: Border.all(
               color: _checked ? Colors.green : _borderColor,
               width: 2,
             ),
             color: _checked ? Colors.green : null,
           ),
-          child: Text(widget.title)),
+          child: Text(
+            widget.title,
+            style: TextStyle(fontSize: 18.w),
+          )),
     );
   }
 }
