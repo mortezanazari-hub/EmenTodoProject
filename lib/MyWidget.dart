@@ -9,6 +9,66 @@ import 'package:roundcheckbox/roundcheckbox.dart';
 import 'package:todoproject/Constant.dart';
 import 'package:todoproject/Models/SimpleToDoModel.dart';
 
+//!Button Check Box
+class ButtonCheckBox extends StatefulWidget {
+  String title;
+  Function(bool) onTap;
+  Color borderColor;
+  double screenWidth;
+
+  ButtonCheckBox(
+      {super.key,
+      required this.title,
+      required this.screenWidth,
+      required this.onTap,
+      required this.borderColor});
+
+  @override
+  State<ButtonCheckBox> createState() => _ButtonCheckBoxState();
+}
+
+class _ButtonCheckBoxState extends State<ButtonCheckBox> {
+  bool _checked = false; // default value is false
+  late Color _borderColor;
+  late double _screenWidth;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _borderColor = widget.borderColor;
+    _screenWidth = widget.screenWidth;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _checked = !_checked;
+        });
+        widget.onTap(_checked);
+      },
+      child: Container(
+          width: _screenWidth / 4,
+          height: _screenWidth / 12,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(7.r),
+            border: Border.all(
+              color: _checked ? Colors.green : _borderColor,
+              width: 2,
+            ),
+            color: _checked ? Colors.green : null,
+          ),
+          child: Text(
+            widget.title,
+            style: TextStyle(fontSize: 18.w),
+          )),
+    );
+  }
+}
+
 //!Select Time widget
 class MySelectTime extends StatefulWidget {
   final String title;

@@ -107,21 +107,21 @@ class _AddSimpleTodoState extends State<AddSimpleTodo> {
     return Row(
       children: [
         Spacer(),
-        ButtenCheckBox(
+        ButtonCheckBox(
           screenWidth: _screenWidth,
           borderColor: MyConst.priorityHighColor,
           title: "High",
           onTap: (p0) => {},
         ),
         Spacer(),
-        ButtenCheckBox(
+        ButtonCheckBox(
           screenWidth: _screenWidth,
           borderColor: MyConst.priorityMiddleColor,
           title: "Middle",
           onTap: (p0) => {},
         ),
         Spacer(),
-        ButtenCheckBox(
+        ButtonCheckBox(
           screenWidth: _screenWidth,
           borderColor: MyConst.priorityLowColor,
           title: "low",
@@ -149,62 +149,3 @@ class _AddSimpleTodoState extends State<AddSimpleTodo> {
 }
 
 //----------------------------------------------------------
-
-class ButtenCheckBox extends StatefulWidget {
-  String title;
-  Function(bool) onTap;
-  Color borderColor;
-  double screenWidth;
-
-  ButtenCheckBox(
-      {super.key,
-      required this.title,
-      required this.screenWidth,
-      required this.onTap,
-      required this.borderColor});
-
-  @override
-  State<ButtenCheckBox> createState() => _ButtenCheckBoxState();
-}
-
-class _ButtenCheckBoxState extends State<ButtenCheckBox> {
-  bool _checked = false; // default value is false
-  late Color _borderColor;
-  late double _screenWidth;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _borderColor = widget.borderColor;
-    _screenWidth = widget.screenWidth;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _checked = !_checked;
-        });
-        widget.onTap(_checked);
-      },
-      child: Container(
-          width: _screenWidth / 4,
-          height: _screenWidth / 12,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(7.r),
-            border: Border.all(
-              color: _checked ? Colors.green : _borderColor,
-              width: 2,
-            ),
-            color: _checked ? Colors.green : null,
-          ),
-          child: Text(
-            widget.title,
-            style: TextStyle(fontSize: 18.w),
-          )),
-    );
-  }
-}
