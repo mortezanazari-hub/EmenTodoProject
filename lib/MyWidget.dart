@@ -1,20 +1,17 @@
-import 'dart:math';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:roundcheckbox/roundcheckbox.dart';
 import 'package:todoproject/Constant.dart';
-import 'package:todoproject/Models/SimpleToDoModel.dart';
 
 //!Button Check Box
 class ButtonCheckBox extends StatefulWidget {
-  String title;
-  Function(bool) onTap;
-  Color borderColor;
-  double screenWidth;
+  final String title;
+  final Function(bool) onTap;
+  final Color borderColor;
+  final double screenWidth;
 
   ButtonCheckBox(
       {super.key,
@@ -72,7 +69,7 @@ class _ButtonCheckBoxState extends State<ButtonCheckBox> {
 //!Select Time widget
 class MySelectTime extends StatefulWidget {
   final String title;
-  double screenWidth;
+  late double screenWidth;
 
   MySelectTime({super.key, required this.title, required this.screenWidth});
 
@@ -157,98 +154,6 @@ class _MySelectTimeState extends State<MySelectTime> {
           ),
         )
       ],
-    );
-  }
-}
-
-//!To do List Model
-class TodoListModel extends StatelessWidget {
-  late DateTime dateTime;
-  late int index;
-
-  TodoListModel({super.key, required this.index, required this.dateTime});
-
-  Random random = new Random();
-
-  late var _todoList = MyConst.TodoListQuery(dateTime);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      clipBehavior: Clip.antiAlias,
-      margin: const EdgeInsets.only(top: 10),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(7),
-          color: MyConst.field_Black_Color),
-      child: Padding(
-        padding: const EdgeInsets.only(right: 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 15,
-              height: 80,
-              color: _todoList[index].priority == Priority.high
-                  ? MyConst.priorityHighColor
-                  : _todoList[index].priority == Priority.medium
-                      ? MyConst.priorityMiddleColor
-                      : MyConst.priorityLowColor,
-            ),
-            const SizedBox(
-              width: 15,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 13),
-                Text(
-                  _todoList[index].title,
-                  style: TextStyle(fontSize: 16),
-                ),
-                SizedBox(height: 5),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.edit_calendar,
-                      color: MyConst.white_80_Color,
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      DateFormat('d MMM').format(_todoList[index].date),
-                      style: TextStyle(
-                          color: MyConst.white_80_Color, fontSize: 14),
-                    )
-                  ],
-                )
-              ],
-            ),
-            Spacer(),
-            Center(
-              heightFactor: 3,
-              child: RoundCheckBox(
-                isChecked: _todoList[index].isChecked,
-                checkedColor: Color(0xffBA83DE),
-                checkedWidget: Icon(Icons.check),
-                border: Border.all(
-                  color: _todoList[index].isChecked
-                      ? Colors.black
-                      : Color(0xffBA83DE),
-                  width: 5,
-                  strokeAlign: 0.5,
-                ),
-                uncheckedColor: Color.fromARGB(0, 0, 0, 0),
-                size: 26.6,
-                onTap: (istap) {
-                  _todoList[index].isChecked = !_todoList[index].isChecked;
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

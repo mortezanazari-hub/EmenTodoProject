@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:todoproject/screens/AddSimpleTodo.dart';
 import 'package:todoproject/screens/HomeScreen.dart';
 
+import 'Tset.dart';
+
 void main() {
   runApp(const MyWidget());
 }
@@ -21,7 +23,7 @@ class MyWidget extends StatelessWidget {
           ),
         ),
         debugShowCheckedModeBanner: false,
-        home: Homescreen(),
+        home: Test(),
       ),
     );
   }
