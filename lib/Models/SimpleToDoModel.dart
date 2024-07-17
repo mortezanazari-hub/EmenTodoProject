@@ -1,7 +1,7 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
 
-class SimpleTodoModel {
+class SimpleToDoModel {
   int _id;
   String _title;
   String? _description;
@@ -12,7 +12,7 @@ class SimpleTodoModel {
   bool _isChecked;
   Priority _priority;
 
-  SimpleTodoModel({
+  SimpleToDoModel({
     required int id,
     required String title,
     String? description,

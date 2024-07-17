@@ -24,7 +24,7 @@ class MyConst {
   }
 
   //db query
-  static List<SimpleTodoModel> TodoListQuery(DateTime dateTime) {
+  static List<SimpleToDoModel> TodoListQuery(DateTime dateTime) {
     return Fakedb.simpleTodoList
         .where((todo) => todo.date == dateTime)
         .toList();
