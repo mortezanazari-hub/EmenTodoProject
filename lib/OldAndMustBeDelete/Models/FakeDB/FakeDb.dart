@@ -1,5 +1,6 @@
-import 'package:todoproject/Constant.dart';
-import 'package:todoproject/Models/SimpleToDoModel.dart';
+import 'package:todoproject/OldAndMustBeDelete/Models/SimpleToDoModel.dart';
+
+import '../../Constant.dart';
 
 class Fakedb {
   static List<SimpleToDoModel> simpleTodoList = [

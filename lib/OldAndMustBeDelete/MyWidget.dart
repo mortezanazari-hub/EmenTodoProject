@@ -1,10 +1,12 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:todoproject/Constant.dart';
+import 'package:todoproject/OldAndMustBeDelete/Constant.dart';
 
 //!Button Check Box
 class ButtonCheckBox extends StatefulWidget {
@@ -483,7 +485,7 @@ class _DateWeekSelectorState extends State<DateWeekSelector> {
 
 //* Show Week duration
   Row ShowWeek() {
-    DateTime? selected;
+    //  DateTime? selected;
     return Row(
       children: [
         InkWell(
@@ -510,9 +512,9 @@ class _DateWeekSelectorState extends State<DateWeekSelector> {
           onTap: () async {
             DateTime? pickedDate = await showDatePicker(
               context: context,
-              initialDate: _selectedDate!,
+              initialDate: _selectedDate,
               firstDate: DateTime(2020),
-              lastDate: DateTime.now().add(Duration(days: 3650)),
+              lastDate: DateTime.now().add(const Duration(days: 3650)),
             );
             if (pickedDate != null && pickedDate != _selectedDate) {
               setState(() {

@@ -1,10 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
-import 'package:todoproject/Constant.dart';
-import 'package:todoproject/main.dart';
 
+import '../Constant.dart';
 import '../MyWidget.dart';
 
 class AddSimpleTodo extends StatefulWidget {

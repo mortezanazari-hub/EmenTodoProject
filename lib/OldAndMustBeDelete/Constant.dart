@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:todoproject/Models/FakeDB/FakeDb.dart';
-import 'package:todoproject/Models/SimpleToDoModel.dart';
+import 'package:todoproject/OldAndMustBeDelete/Models/FakeDB/FakeDb.dart';
+
+import 'Models/SimpleToDoModel.dart';
 
 class MyConst {
   static Color white_Color = const Color(0xffffffff);
@@ -29,4 +30,6 @@ class MyConst {
         .where((todo) => todo.date == dateTime)
         .toList();
   }
+
+  static int? longPressedIndex;
 }
